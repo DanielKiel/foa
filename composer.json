@@ -1,0 +1,24 @@
+{
+  "name": "Dion/foa",
+  "description": "",
+  "authors": [
+    {
+      "name": "Daniel Koch",
+      "email": "dionyseos@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "illuminate/support": "5.4.*",
+    "laravel/passport": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dion\\Foa\\": "src"
+    },
+    "classmap": [
+      "src/database/migrations"
+    ]
+  },
+  "minimum-stability": "stable"
+}
