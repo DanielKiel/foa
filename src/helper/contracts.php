@@ -41,3 +41,12 @@ if (! function_exists('foa_search')) {
         return app(\Dion\Foa\Contracts\SearchEngineContract::class);
     }
 }
+
+if (! function_exists('foa_upload')) {
+    /**
+     * @return \Dion\Foa\Repositories\Uploads
+     */
+    function foa_upload() {
+        return app(\Dion\Foa\Contracts\UploadInterface::class);
+    }
+}

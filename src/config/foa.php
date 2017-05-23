@@ -18,5 +18,16 @@ return [
                 'casts' => 'int'
             ],
         ]
+    ],
+
+    'upload' => [
+        'thumbs' => [
+            'small' => [
+                'width' => '200'
+            ],
+            'medium' => [
+                'width' => '400'
+            ]
+        ]
     ]
 ];

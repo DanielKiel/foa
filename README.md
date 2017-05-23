@@ -9,6 +9,7 @@ To can also being fast at development, I build this package to provide a simple 
 
 Laravel passport need to be installed and setup need to be done, see: https://laravel.com/docs/5.4/passport
 
+http://image.intervention.io/getting_started/installation#laravel
 
 ## Testings 
 The package contains some basic unit tests. Run /vendor/bin/php vendor/Dion/foa/tests to test the package. Unit tests use DatabaseTransactions and WithoutMiddleware traits.

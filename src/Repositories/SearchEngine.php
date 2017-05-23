@@ -63,6 +63,9 @@ class SearchEngine
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
     private function returnPagination()
     {
         return $this->search->paginate(
@@ -73,14 +76,19 @@ class SearchEngine
         );
     }
 
+    /**
+     * @return mixed
+     */
     private function returnCollection()
     {
         return $this->search->get();
     }
 
+    /**
+     * @param string $filter
+     */
     private function transformFilter(string $filter)
     {
-        //preg_match_all('/\({1}(.*){1}\)$/U',$filter, $matches);
         preg_match('~'. implode('|', $this->operators) . '~', $filter, $matches);
 
         $match = array_first($matches, function() {return true;}, false);

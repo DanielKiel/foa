@@ -17,7 +17,45 @@ class V1Service
     {
         if (! $app->routesAreCached()) {
             self::registerFoaAdminService();
+            self::registerFoaUploadService();
+            self::registerFrontendService();
         }
+    }
+
+    protected static function registerFrontendService()
+    {
+        Route::group(
+            [
+                'prefix' => 'services/v1',
+                'namespace' => '\Dion\Foa\HTTP\Controllers'
+            ],
+            function() {
+                Route::get('/{objectTypeName}', [
+                    'as' => 'services.frontend.get', 'uses' => 'ObjectsServicesController@get'
+                ]);
+                Route::get('/{objectTypeName}/{id}', [
+                    'as' => 'services.frontend.getById', 'uses' => 'ObjectsServicesController@getById'
+                ]);
+            }
+        );
+    }
+
+    protected static function registerFoaUploadService()
+    {
+        Route::group(
+            [
+                'prefix' => 'services/upload/v1',
+                'middleware' => [
+                    'auth:api',
+                ],
+                'namespace' => '\Dion\Foa\HTTP\Controllers'
+            ],
+            function() {
+                Route::post('/', [
+                    'as' => 'services.upload', 'uses' => 'UploadServiceController@upload'
+                ]);
+            }
+        );
     }
 
     protected static function registerFoaAdminService()

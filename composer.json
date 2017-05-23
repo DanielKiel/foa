@@ -10,7 +10,8 @@
   "require": {
     "php": ">=7.0",
     "illuminate/support": "5.4.*",
-    "laravel/passport": "^2.0"
+    "laravel/passport": "^2.0",
+    "intervention/image": "^2.3"
   },
   "autoload": {
     "psr-4": {

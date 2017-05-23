@@ -57,4 +57,15 @@ class Object extends Model
     {
         return $this->hasMany(Relation::class, 'base_id');
     }
+
+    public function toArray()
+    {
+        $all = recursiveToArray( (array) $this->data );
+
+        //array_forget($all, ['poster_image', 'mineral_category']);
+
+        array_set($all, 'id', $this->id);
+
+        return $all;
+    }
 }
