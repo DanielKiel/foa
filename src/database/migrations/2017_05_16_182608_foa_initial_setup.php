@@ -49,18 +49,15 @@ class FoaInitialSetup extends Migration
         });
 
         Schema::table('objects', function(Blueprint $table) {
-            \DB::statement('ALTER TABLE objects ROW_FORMAT=DYNAMIC;');
             $table->foreign('objecttypes_id')->references('id')->on('objecttypes');
             $table->index('deleted_at');
         });
 
         Schema::table('objecttypes', function(Blueprint $table) {
-            \DB::statement('ALTER TABLE objecttypes ROW_FORMAT=DYNAMIC;');
             $table->unique('name');
         });
 
         Schema::table('relations', function(Blueprint $table) {
-            \DB::statement('ALTER TABLE relations ROW_FORMAT=DYNAMIC;');
             $table->foreign('base_id')->references('id')->on('objects');
             $table->foreign('target_id')->references('id')->on('objects');
             $table->foreign('base_type_id')->references('id')->on('objecttypes');

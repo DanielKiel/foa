@@ -37,6 +37,14 @@ class Object extends Model
         'data' => 'object'
     ];
 
+    /**
+     * setting some default values here
+     * @var array
+     */
+    protected $attributes = [
+        'data' => '{}'
+    ];
+
     public function objectType(): BelongsTo
     {
         return $this->belongsTo(ObjectType::class);
@@ -61,8 +69,6 @@ class Object extends Model
     public function toArray()
     {
         $all = recursiveToArray( (array) $this->data );
-
-        //array_forget($all, ['poster_image', 'mineral_category']);
 
         array_set($all, 'id', $this->id);
 
