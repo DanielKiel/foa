@@ -10,6 +10,7 @@ namespace Dion\Foa\Repositories;
 
 
 use Dion\Foa\Contracts\ObjectsInterface;
+use Dion\Foa\Events\DataDefined;
 use Dion\Foa\Models\Object;
 use Dion\Foa\Models\ObjectType;
 
@@ -142,7 +143,9 @@ class Objects implements ObjectsInterface
             array_set($data, $property, $attribute);
         }
 
-        array_set($return, 'data', $data);
+        event($event = new DataDefined($this->objectType, $data));
+
+        array_set($return, 'data', $event->data);
 
         return $return;
 

@@ -97,7 +97,7 @@ class ObjectTypes implements ObjectTypesInterface
      */
     public function getSchema(ObjectType $objectType): array
     {
-        return $objectType->rules->schema;
+        return recursiveToArray( (array) $objectType->rules->schema );
     }
 
     /**

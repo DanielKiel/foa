@@ -2,6 +2,7 @@
 
 namespace Dion\Foa\Models;
 
+use Dion\Foa\Events\DataTransformed;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -47,7 +48,7 @@ class Object extends Model
 
     public function objectType(): BelongsTo
     {
-        return $this->belongsTo(ObjectType::class);
+        return $this->belongsTo(ObjectType::class, 'objecttypes_id');
     }
 
     /**
@@ -72,6 +73,8 @@ class Object extends Model
 
         array_set($all, 'id', $this->id);
 
-        return $all;
+        event($event = new DataTransformed($this->objectType, $all));
+
+        return $event->data;
     }
 }
