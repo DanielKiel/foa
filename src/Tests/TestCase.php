@@ -25,7 +25,6 @@ class TestCase extends BaseTestCase
             'name' => 'name',
         ]);
 
-        $this->actingAs($user);
         Passport::actingAs($user);
     }
 }
