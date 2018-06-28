@@ -2,6 +2,8 @@
 
 namespace Dion\Foa\Models;
 
+use Dion\Foa\Events\UserRelatedModelCreating;
+use Dion\Foa\Traits\UserRelation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ObjectType extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, UserRelation;
 
     /**
      * @var bool
@@ -32,7 +34,12 @@ class ObjectType extends Model
     protected $fillable = [
         'name',
         'model_type',
-        'rules'
+        'rules',
+        'users_id'
+    ];
+
+    protected $dispatchesEvents = [
+        'creating' => UserRelatedModelCreating::class,
     ];
 
     /**

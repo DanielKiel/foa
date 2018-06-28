@@ -3,6 +3,8 @@
 namespace Dion\Foa\Models;
 
 use Dion\Foa\Events\DataTransformed;
+use Dion\Foa\Events\UserRelatedModelCreating;
+use Dion\Foa\Traits\UserRelation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Object extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, UserRelation;
 
     /**
      * @var bool
@@ -31,7 +33,7 @@ class Object extends Model
      * @var array
      */
     protected $fillable = [
-        'objecttypes_id', 'data'
+        'objecttypes_id', 'data', 'users_id'
     ];
 
     protected $casts = [
@@ -44,6 +46,10 @@ class Object extends Model
      */
     protected $attributes = [
         'data' => '{}'
+    ];
+
+    protected $dispatchesEvents = [
+        'creating' => UserRelatedModelCreating::class,
     ];
 
     public function objectType(): BelongsTo

@@ -40,9 +40,7 @@ class StructParser extends Command
     }
 
     /**
-     * Execute the console command.
-     *
-     * @return mixed
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function handle()
     {
@@ -85,9 +83,11 @@ class StructParser extends Command
 
         $rules = $objectType->rules;
 
-        $rules->schema = array_get($struct, 'rules', []);
+        $rules->schema = array_get($struct, 'schema', []);
         $rules->relations = array_get($struct, 'relations', []);
         $rules->static = array_get($struct, 'static', false);
+        $rules->validation = array_get($struct, 'validation', []);
+        $rules->validation = array_get($struct, 'setup', []);
 
         $objectType->update([
             'rules' => $rules

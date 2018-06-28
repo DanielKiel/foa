@@ -1,6 +1,6 @@
 <?php
 
-use Tests\TestCase;
+use Dion\Foa\Tests\TestCase;
 
 /**
  * Created by PhpStorm.

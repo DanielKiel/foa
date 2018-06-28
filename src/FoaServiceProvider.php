@@ -18,8 +18,10 @@ use Dion\Foa\Contracts\SearchEngineContract;
 use Dion\Foa\Contracts\UploadInterface;
 use Dion\Foa\Events\DataDefined;
 use Dion\Foa\Events\DataTransformed;
+use Dion\Foa\Events\UserRelatedModelCreating;
 use Dion\Foa\Listeners\DataDefinedListener;
 use Dion\Foa\Listeners\DataTransformedListener;
+use Dion\Foa\Listeners\UserRelatedModelCreatingListener;
 use Dion\Foa\Repositories\Objects;
 use Dion\Foa\Repositories\ObjectTypes;
 use Dion\Foa\Repositories\Relations;
@@ -71,6 +73,7 @@ class FoaServiceProvider extends ServiceProvider
     {
         $this->app->events->listen(DataDefined::class, DataDefinedListener::class);
         $this->app->events->listen(DataTransformed::class, DataTransformedListener::class);
+        $this->app->events->listen(UserRelatedModelCreating::class, UserRelatedModelCreatingListener::class);
     }
 
     /**

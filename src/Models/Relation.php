@@ -2,13 +2,15 @@
 
 namespace Dion\Foa\Models;
 
+use Dion\Foa\Events\UserRelatedModelCreating;
+use Dion\Foa\Traits\UserRelation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Relation extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, UserRelation;
 
     public $timestamps = true;
 
@@ -27,7 +29,12 @@ class Relation extends Model
         'target_id',
         'target_type_id',
         'name',
-        'inverse_name'
+        'inverse_name',
+        'users_id'
+    ];
+
+    protected $dispatchesEvents = [
+        'creating' => UserRelatedModelCreating::class,
     ];
 
     protected $with = [];
