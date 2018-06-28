@@ -16,6 +16,10 @@ use Dion\Foa\Contracts\ObjectTypesInterface;
 use Dion\Foa\Contracts\RelationsInterface;
 use Dion\Foa\Contracts\SearchEngineContract;
 use Dion\Foa\Contracts\UploadInterface;
+use Dion\Foa\Events\DataDefined;
+use Dion\Foa\Events\DataTransformed;
+use Dion\Foa\Listeners\DataDefinedListener;
+use Dion\Foa\Listeners\DataTransformedListener;
 use Dion\Foa\Repositories\Objects;
 use Dion\Foa\Repositories\ObjectTypes;
 use Dion\Foa\Repositories\Relations;
@@ -59,6 +63,14 @@ class FoaServiceProvider extends ServiceProvider
         $this->app->bind(UploadInterface::class, Uploads::class);
 
         Registrar::init($this->app);
+
+        $this->__listen();
+    }
+
+    public function __listen()
+    {
+        $this->app->events->listen(DataDefined::class, DataDefinedListener::class);
+        $this->app->events->listen(DataTransformed::class, DataTransformedListener::class);
     }
 
     /**

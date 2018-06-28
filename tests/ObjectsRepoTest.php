@@ -10,7 +10,7 @@ use Tests\TestCase;
  */
 class ObjectsRepoTest extends TestCase
 {
-    use \Illuminate\Foundation\Testing\DatabaseTransactions, \Illuminate\Foundation\Testing\WithoutMiddleware;
+    use \Illuminate\Foundation\Testing\DatabaseMigrations, \Illuminate\Foundation\Testing\WithoutMiddleware;
 
     public function testBasics()
     {

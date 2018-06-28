@@ -41,9 +41,7 @@ class ObjectType extends Model
      */
     protected $attributes = [
         'model_type' => Object::class,
-        'rules' => [
-
-        ]
+        'rules' => '{}'
     ];
 
     protected $casts = [
