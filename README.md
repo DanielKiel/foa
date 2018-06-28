@@ -13,3 +13,28 @@ http://image.intervention.io/getting_started/installation#laravel
 
 ## Testings 
 The package contains some basic unit tests. Run /vendor/bin/php vendor/Dion/foa/tests to test the package. Unit tests use DatabaseTransactions and WithoutMiddleware traits.
+
+
+# Seeting up an ObjectType
+
+```php
+[
+    'name' => 'Car',
+    'schema' => [
+        'type' => 'text',
+        'price' => 'float',
+        'model' => 'date' //Baujahr
+    ],
+    'validation' => [
+        'type' => 'min:3'
+    ],
+    'relations' => [
+    
+    ],
+    'setup' => [
+        'schema' => 'min' //all schema attributes are required, more are possible
+        // 'schema' => 'exact' // only schema attributes are allowed, they are required
+        // 'schema' => 'sometimes' // schema attributes are possible, when then they are casted
+    ]
+]
+```

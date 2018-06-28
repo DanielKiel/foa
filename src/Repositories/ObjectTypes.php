@@ -104,9 +104,43 @@ class ObjectTypes implements ObjectTypesInterface
      * @param ObjectType $objectType
      * @return array
      */
+    public function getSetup(ObjectType $objectType): array
+    {
+        return recursiveToArray( (array) $objectType->rules->setup );
+    }
+
+    /**
+     * @param ObjectType $objectType
+     * @return array
+     */
     public function getValidationRules(ObjectType $objectType): array
     {
-        return recursiveToArray( (array) $objectType->rules->validation );
+        $rules = recursiveToArray( (array) $objectType->rules->validation );
+
+        $setup = $this->getSetup($objectType);
+
+        if (! array_has($setup, 'schema')) {
+            return $rules;
+        }
+
+        $schemaSetup = array_get($setup, 'schema');
+
+        //when using min or exact, the attributes are required
+        if ($schemaSetup === 'min' || $schemaSetup === 'exact') {
+            $schema = $this->getSchema($objectType);
+
+            foreach ($rules as $key => $rule) {
+                array_set($rules, $key, 'required|' . $rule);
+            }
+
+            foreach ($schema as $attribute => $cast) {
+                if (! array_has($rules, $attribute)) {
+                    array_set($rules, $attribute, 'required');
+                }
+            }
+        }
+
+        return $rules;
     }
 
     public function defineValidationRules(ObjectType $objectType, array $validation): void
@@ -127,6 +161,19 @@ class ObjectTypes implements ObjectTypesInterface
         $rules = $objectType->rules;
 
         $rules->schema = $schema;
+
+        $objectType->update(['rules' => $rules]);
+    }
+
+    /**
+     * @param ObjectType $objectType
+     * @param array $setup
+     */
+    public function defineSetup(ObjectType $objectType, array $setup = []): void
+    {
+        $rules = $objectType->rules;
+
+        $rules->setup = $setup;
 
         $objectType->update(['rules' => $rules]);
     }
@@ -162,6 +209,10 @@ class ObjectTypes implements ObjectTypesInterface
 
         if (! array_has($rules, 'static')) {
             array_set($rules, 'static', false);
+        }
+
+        if (! array_has($rules, 'setup')) {
+            array_set($rules, 'setup', false);
         }
 
         return $rules;

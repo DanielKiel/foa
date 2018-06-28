@@ -13,6 +13,8 @@ use Dion\Foa\Contracts\ObjectsInterface;
 use Dion\Foa\Events\DataDefined;
 use Dion\Foa\Models\Object;
 use Dion\Foa\Models\ObjectType;
+use Dion\Foa\Rules\NotAllowed;
+use Illuminate\Support\Facades\Validator;
 
 class Objects implements ObjectsInterface
 {
@@ -44,10 +46,7 @@ class Objects implements ObjectsInterface
         $attributes = $this->prepareAttributes($attributes);
 
         if ($this->validate($this->objectType, $attributes) === false) {
-            return [
-                'status' => 'error',
-                'errors' => $this->errors
-            ];
+            return (new FailedObject($this->errors))->codeFailure();
         }
 
         return Object::create($attributes);
@@ -70,10 +69,7 @@ class Objects implements ObjectsInterface
         $attributes = $this->prepareAttributes($attributes);
 
         if ($this->validate($this->objectType, $attributes) === false) {
-            return [
-                'status' => 'error',
-                'errors' => $this->errors
-            ];
+            return (new FailedObject($this->errors))->codeFailure();
         }
 
         $object->update($attributes);
@@ -108,6 +104,31 @@ class Objects implements ObjectsInterface
     private function validate(ObjectType $objectType, array $attributes)
     {
         $validationRules = foa_objectTypes()->getValidationRules($objectType);
+
+        if (empty($validationRules)) {
+            return true;
+        }
+
+        $setup = foa_objectTypes()->getSetup($objectType);
+        $schemaSetup = array_get($setup, 'schema');
+
+        if ($schemaSetup === 'exact') {
+            $schema = foa_objectTypes()->getSchema($objectType);
+
+            foreach (array_get($attributes, 'data') as $attribute => $value) {
+                if (! array_has($schema, $attribute) && $attribute !== 'objectType') {
+                    array_set($validationRules, $attribute, new NotAllowed());
+                }
+            }
+        }
+
+        $validator = Validator::make(array_get($attributes, 'data'), $validationRules);
+
+        if($validator->fails()) {
+            $this->errors = $validator->errors();
+
+            return false;
+        }
 
         return true;
     }
