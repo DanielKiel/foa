@@ -49,6 +49,8 @@ class Objects implements ObjectsInterface
             return (new FailedObject($this->errors))->codeFailure();
         }
 
+        $attributes = $this->castAttributes($attributes);
+
         return Object::create($attributes);
     }
 
@@ -71,6 +73,8 @@ class Objects implements ObjectsInterface
         if ($this->validate($this->objectType, $attributes) === false) {
             return (new FailedObject($this->errors))->codeFailure();
         }
+
+        $attributes = $this->castAttributes($attributes);
 
         $object->update($attributes);
 
@@ -164,11 +168,18 @@ class Objects implements ObjectsInterface
             array_set($data, $property, $attribute);
         }
 
-        event($event = new DataDefined($this->objectType, $data));
-
-        array_set($return, 'data', $event->data);
+        array_set($return, 'data', $data);
 
         return $return;
 
+    }
+
+    public function castAttributes($attributes)
+    {
+        event($event = new DataDefined($this->objectType, array_get($attributes, 'data')));
+
+        array_set($attributes, 'data', $event->data);
+
+        return $attributes;
     }
 }

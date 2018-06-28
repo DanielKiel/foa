@@ -94,7 +94,7 @@ class AttributeValidationTest extends TestCase
 
         $object = foa_objects()->insert([
             'objectType' => 'Validation',
-            'pass' => 'myPassword',
+            'pass' => 'myPasswordHasNowMoreThen16Characters',
             'neededText' => 'i am here',
             'allowed' => 'i am allowed when using exact'
         ]);
@@ -156,5 +156,67 @@ class AttributeValidationTest extends TestCase
         ]);
 
         $this->assertFalse($object instanceof \Dion\Foa\Models\Object);
+    }
+
+    public function test_required_by_schema_setup_sometimes()
+    {
+        $objectType = foa_objectTypes()->insert([
+            'name' => 'Validation',
+
+        ]);
+
+        foa_objectTypes()->defineValidationRules($objectType,[
+            'pass' => 'min:16',
+        ]);
+
+        foa_objectTypes()->defineSchema($objectType,[
+            'pass' => 'password',
+            'neededText' => 'text'
+        ]);
+
+        foa_objectTypes()->defineSetup($objectType, [
+            'schema' => 'sometimes'
+        ]);
+
+        $object = foa_objects()->insert([
+            'objectType' => 'Validation',
+            'pass' => 'myPassword',
+        ]);
+
+        $this->assertFalse($object instanceof \Dion\Foa\Models\Object);
+
+        $object = foa_objects()->insert([
+            'objectType' => 'Validation',
+            'neededText' => 'no we are here',
+        ]);
+
+        $this->assertTrue($object instanceof \Dion\Foa\Models\Object);
+
+
+        $object = foa_objects()->insert([
+            'objectType' => 'Validation',
+            'pass' => 'myPasswordHasNowMoreThen16Characters',
+            'neededText' => 'i am here'
+        ]);
+
+        $this->assertTrue($object instanceof \Dion\Foa\Models\Object);
+
+
+        $object2 = foa_objects()->update($object,[
+            'objectType' => 'Validation',
+            'pass' => 'myPasswordHasNowMoreThen16Characters',
+        ]);
+
+        //this is an update - so saved values are megred with new values and so each update is a partial update
+        $this->assertTrue($object2 instanceof \Dion\Foa\Models\Object);
+
+        $object = foa_objects()->insert([
+            'objectType' => 'Validation',
+            'pass' => 'myPasswordHasNowMoreThen16Characters',
+            'neededText' => 'i am here',
+            'allowed' => 'i am allowed when using exact'
+        ]);
+
+        $this->assertTrue($object instanceof \Dion\Foa\Models\Object);
     }
 }
