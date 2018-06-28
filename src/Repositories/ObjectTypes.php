@@ -106,9 +106,16 @@ class ObjectTypes implements ObjectTypesInterface
      */
     public function getValidationRules(ObjectType $objectType): array
     {
-        //need to transform schema relevant data to validation rules
+        return recursiveToArray( (array) $objectType->rules->validation );
+    }
 
-        return [];
+    public function defineValidationRules(ObjectType $objectType, array $validation): void
+    {
+        $rules = $objectType->rules;
+
+        $rules->validation = $validation;
+
+        $objectType->update(['rules' => $rules]);
     }
 
     /**
@@ -147,6 +154,10 @@ class ObjectTypes implements ObjectTypesInterface
 
         if (! array_has($rules, 'relations')) {
             array_set($rules, 'relations', []);
+        }
+
+        if (! array_has($rules, 'validation')) {
+            array_set($rules, 'validation', []);
         }
 
         if (! array_has($rules, 'static')) {
