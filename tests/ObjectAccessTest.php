@@ -40,8 +40,6 @@ class ObjectAccessTest extends TestCase
             'name' => 'name',
         ]);
 
-        \Illuminate\Database\Eloquent\Model::clearBootedModels();
-
 
         \Laravel\Passport\Passport::actingAs($otherUser);
 
