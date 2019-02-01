@@ -23,11 +23,8 @@ class Relation extends Model
 
     protected $fillable = [
         'base_id',
-        'base_type_id',
         'target_id',
-        'target_type_id',
-        'name',
-        'inverse_name'
+        'relation_type_id',
     ];
 
     protected $with = [];
@@ -37,7 +34,7 @@ class Relation extends Model
      */
     public function baseObject(): BelongsTo
     {
-        return $this->belongsTo(Object::class, 'base_id');
+        return $this->belongsTo(BaseObject::class, 'base_id');
     }
 
     /**
@@ -45,16 +42,11 @@ class Relation extends Model
      */
     public function targetObject(): BelongsTo
     {
-        return $this->belongsTo(Object::class, 'target_id');
+        return $this->belongsTo(BaseObject::class, 'target_id');
     }
 
-    public function baseType(): BelongsTo
+    public function relationType(): BelongsTo
     {
-        return $this->belongsTo(ObjectType::class, 'base_type_id');
-    }
-
-    public function targetType(): BelongsTo
-    {
-        return $this->belongsTo(ObjectType::class, 'target_type_id');
+        return $this->belongsTo(RelationType::class, 'relation_type_id');
     }
 }

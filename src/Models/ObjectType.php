@@ -40,7 +40,7 @@ class ObjectType extends Model
      * @var array
      */
     protected $attributes = [
-        'model_type' => Object::class,
+        'model_type' => BaseObject::class,
         'rules' => '{}'
     ];
 

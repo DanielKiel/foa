@@ -10,7 +10,7 @@ namespace Dion\Foa\HTTP\Controllers;
 
 
 use App\Http\Controllers\Controller;
-use Dion\Foa\Models\Object;
+use Dion\Foa\Models\BaseObject;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -20,7 +20,7 @@ class ObjectsServicesController extends Controller
     {
         $object = foa_objects()->findById($id);
 
-        if (! $object instanceof Object) {
+        if (! $object instanceof BaseObject) {
             return new JsonResponse([
                 'status' => 'error',
                 'errors' => [
@@ -84,7 +84,7 @@ class ObjectsServicesController extends Controller
 
         $result = foa_objects()->insert($attributes);
 
-        if ($result instanceof Object) {
+        if ($result instanceof BaseObject) {
             return new JsonResponse([
                 'status' => 'success',
                 'data' => $result->toArray()
@@ -98,7 +98,7 @@ class ObjectsServicesController extends Controller
     {
         $object = foa_objects()->findById($id);
 
-        if (! $object instanceof Object) {
+        if (! $object instanceof BaseObject) {
             return new JsonResponse([
                 'status' => 'error',
                 'errors' => [
@@ -118,7 +118,7 @@ class ObjectsServicesController extends Controller
 
         $result = foa_objects()->update($object, $attributes);
 
-        if ($result instanceof Object) {
+        if ($result instanceof BaseObject) {
             return new JsonResponse([
                 'status' => 'success',
                 'data' => $result->toArray()

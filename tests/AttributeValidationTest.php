@@ -28,7 +28,7 @@ class AttributeValidationTest extends TestCase
             'pass' => 'myPassword',
         ]);
 
-        $this->assertFalse($object instanceof \Dion\Foa\Models\Object);
+        $this->assertFalse($object instanceof \Dion\Foa\Models\BaseObject);
 
 
         $object = foa_objects()->insert([
@@ -36,7 +36,7 @@ class AttributeValidationTest extends TestCase
             'pass' => 'myPasswordHasNowMoreThen16Characters',
         ]);
 
-        $this->assertTrue($object instanceof \Dion\Foa\Models\Object);
+        $this->assertTrue($object instanceof \Dion\Foa\Models\BaseObject);
 
 
         $object2 = foa_objects()->update($object,[
@@ -44,7 +44,7 @@ class AttributeValidationTest extends TestCase
             'pass' => 'myPassword',
         ]);
 
-        $this->assertFalse($object2 instanceof \Dion\Foa\Models\Object);
+        $this->assertFalse($object2 instanceof \Dion\Foa\Models\BaseObject);
     }
 
     public function test_required_by_schema_setup_min()
@@ -72,7 +72,7 @@ class AttributeValidationTest extends TestCase
             'pass' => 'myPassword',
         ]);
 
-        $this->assertFalse($object instanceof \Dion\Foa\Models\Object);
+        $this->assertFalse($object instanceof \Dion\Foa\Models\BaseObject);
 
 
         $object = foa_objects()->insert([
@@ -81,7 +81,7 @@ class AttributeValidationTest extends TestCase
             'neededText' => 'i am here'
         ]);
 
-        $this->assertTrue($object instanceof \Dion\Foa\Models\Object);
+        $this->assertTrue($object instanceof \Dion\Foa\Models\BaseObject);
 
 
         $object2 = foa_objects()->update($object,[
@@ -90,7 +90,7 @@ class AttributeValidationTest extends TestCase
         ]);
 
         //this is an update - so saved values are megred with new values and so each update is a partial update
-        $this->assertTrue($object2 instanceof \Dion\Foa\Models\Object);
+        $this->assertTrue($object2 instanceof \Dion\Foa\Models\BaseObject);
 
         $object = foa_objects()->insert([
             'objectType' => 'Validation',
@@ -99,7 +99,7 @@ class AttributeValidationTest extends TestCase
             'allowed' => 'i am allowed when using exact'
         ]);
 
-        $this->assertTrue($object instanceof \Dion\Foa\Models\Object);
+        $this->assertTrue($object instanceof \Dion\Foa\Models\BaseObject);
     }
 
     public function test_required_by_schema_setup_exact()
@@ -127,7 +127,7 @@ class AttributeValidationTest extends TestCase
             'pass' => 'myPassword',
         ]);
 
-        $this->assertFalse($object instanceof \Dion\Foa\Models\Object);
+        $this->assertFalse($object instanceof \Dion\Foa\Models\BaseObject);
 
 
         $object = foa_objects()->insert([
@@ -136,7 +136,7 @@ class AttributeValidationTest extends TestCase
             'neededText' => 'i am here'
         ]);
 
-        $this->assertTrue($object instanceof \Dion\Foa\Models\Object);
+        $this->assertTrue($object instanceof \Dion\Foa\Models\BaseObject);
 
 
         $object2 = foa_objects()->update($object,[
@@ -145,7 +145,7 @@ class AttributeValidationTest extends TestCase
         ]);
 
         //this is an update - so saved values are megred with new values and so each update is a partial update
-        $this->assertTrue($object2 instanceof \Dion\Foa\Models\Object);
+        $this->assertTrue($object2 instanceof \Dion\Foa\Models\BaseObject);
 
 
         $object = foa_objects()->insert([
@@ -155,7 +155,7 @@ class AttributeValidationTest extends TestCase
             'notAllowed' => 'i am not allowed when using exact'
         ]);
 
-        $this->assertFalse($object instanceof \Dion\Foa\Models\Object);
+        $this->assertFalse($object instanceof \Dion\Foa\Models\BaseObject);
     }
 
     public function test_required_by_schema_setup_sometimes()
@@ -183,14 +183,14 @@ class AttributeValidationTest extends TestCase
             'pass' => 'myPassword',
         ]);
 
-        $this->assertFalse($object instanceof \Dion\Foa\Models\Object);
+        $this->assertFalse($object instanceof \Dion\Foa\Models\BaseObject);
 
         $object = foa_objects()->insert([
             'objectType' => 'Validation',
             'neededText' => 'no we are here',
         ]);
 
-        $this->assertTrue($object instanceof \Dion\Foa\Models\Object);
+        $this->assertTrue($object instanceof \Dion\Foa\Models\BaseObject);
 
 
         $object = foa_objects()->insert([
@@ -199,7 +199,7 @@ class AttributeValidationTest extends TestCase
             'neededText' => 'i am here'
         ]);
 
-        $this->assertTrue($object instanceof \Dion\Foa\Models\Object);
+        $this->assertTrue($object instanceof \Dion\Foa\Models\BaseObject);
 
 
         $object2 = foa_objects()->update($object,[
@@ -208,7 +208,7 @@ class AttributeValidationTest extends TestCase
         ]);
 
         //this is an update - so saved values are megred with new values and so each update is a partial update
-        $this->assertTrue($object2 instanceof \Dion\Foa\Models\Object);
+        $this->assertTrue($object2 instanceof \Dion\Foa\Models\BaseObject);
 
         $object = foa_objects()->insert([
             'objectType' => 'Validation',
@@ -217,6 +217,6 @@ class AttributeValidationTest extends TestCase
             'allowed' => 'i am allowed when using exact'
         ]);
 
-        $this->assertTrue($object instanceof \Dion\Foa\Models\Object);
+        $this->assertTrue($object instanceof \Dion\Foa\Models\BaseObject);
     }
 }

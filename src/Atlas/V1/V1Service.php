@@ -51,8 +51,12 @@ class V1Service
                 'namespace' => '\Dion\Foa\HTTP\Controllers'
             ],
             function() {
-                Route::post('/', [
+                Route::post('/{objectType}', [
                     'as' => 'services.upload', 'uses' => 'UploadServiceController@upload'
+                ]);
+
+                Route::get('/{objectType}/{filename}', [
+                    'as' => 'services.upload', 'uses' => 'UploadServiceController@get'
                 ]);
             }
         );

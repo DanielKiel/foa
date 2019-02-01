@@ -44,7 +44,11 @@ class ObjectTypes implements ObjectTypesInterface
     {
         array_set($attributes, 'rules', $this->defineDefaultRules($attributes));
 
-        return ObjectType::create($attributes);
+        $objectType = ObjectType::create($attributes);
+
+        foa_relationTypes()->resolveDefinition($objectType->fresh());
+
+        return $objectType;
     }
 
     /**
@@ -57,6 +61,8 @@ class ObjectTypes implements ObjectTypesInterface
         array_set($attributes, 'rules', $this->defineDefaultRules($attributes));
 
         $objectType->update($attributes);
+
+        foa_relationTypes()->resolveDefinition($objectType);
 
         return $objectType;
     }
@@ -189,6 +195,8 @@ class ObjectTypes implements ObjectTypesInterface
         $rules->relations = $relations;
 
         $objectType->update(['rules' => $rules]);
+
+        foa_relationTypes()->resolveDefinition($objectType);
     }
 
     protected function defineDefaultRules($attributes):array

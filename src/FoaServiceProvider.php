@@ -14,6 +14,7 @@ use Dion\Foa\Commands\StructParser;
 use Dion\Foa\Contracts\ObjectsInterface;
 use Dion\Foa\Contracts\ObjectTypesInterface;
 use Dion\Foa\Contracts\RelationsInterface;
+use Dion\Foa\Contracts\RelationTypesInterface;
 use Dion\Foa\Contracts\SearchEngineContract;
 use Dion\Foa\Contracts\UploadInterface;
 use Dion\Foa\Events\DataDefined;
@@ -23,6 +24,7 @@ use Dion\Foa\Listeners\DataTransformedListener;
 use Dion\Foa\Repositories\Objects;
 use Dion\Foa\Repositories\ObjectTypes;
 use Dion\Foa\Repositories\Relations;
+use Dion\Foa\Repositories\RelationTypes;
 use Dion\Foa\Repositories\SearchEngine;
 use Dion\Foa\Repositories\Uploads;
 use Illuminate\Support\ServiceProvider;
@@ -42,9 +44,7 @@ class FoaServiceProvider extends ServiceProvider
         }
 
         //run php artisan vendor:publish  --tag=migrations, so later you can run php artisan:migrate to do your migration
-        $this->publishes([
-            __DIR__.'/database/migrations/' => $this->app->databasePath().'/migrations',
-        ], 'migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
 
 
         $this->publishes([
@@ -57,6 +57,8 @@ class FoaServiceProvider extends ServiceProvider
         $this->app->bind(ObjectTypesInterface::class, ObjectTypes::class);
 
         $this->app->bind(RelationsInterface::class, Relations::class);
+
+        $this->app->bind(RelationTypesInterface::class, RelationTypes::class);
 
         $this->app->bind(SearchEngineContract::class, SearchEngine::class);
 

@@ -33,6 +33,15 @@ if (! function_exists('foa_relations')) {
     }
 }
 
+if (! function_exists('foa_relationTypes')) {
+    /**
+     * @return \Dion\Foa\Repositories\RelationTypes
+     */
+    function foa_relationTypes() {
+        return app(\Dion\Foa\Contracts\RelationTypesInterface::class);
+    }
+}
+
 if (! function_exists('foa_search')) {
     /**
      * @return \Dion\Foa\Repositories\SearchEngine

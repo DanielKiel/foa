@@ -10,6 +10,8 @@ namespace Dion\Foa\Repositories;
 
 
 use Dion\Foa\Contracts\RelationsInterface;
+use Dion\Foa\Exceptions\RelationsException;
+use Dion\Foa\Models\ObjectType;
 
 class Relations implements RelationsInterface
 {

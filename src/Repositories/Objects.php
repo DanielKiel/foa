@@ -11,7 +11,7 @@ namespace Dion\Foa\Repositories;
 
 use Dion\Foa\Contracts\ObjectsInterface;
 use Dion\Foa\Events\DataDefined;
-use Dion\Foa\Models\Object;
+use Dion\Foa\Models\BaseObject;
 use Dion\Foa\Models\ObjectType;
 use Dion\Foa\Rules\NotAllowed;
 use Illuminate\Support\Facades\Validator;
@@ -34,7 +34,7 @@ class Objects implements ObjectsInterface
 
     public function findById($id)
     {
-        return Object::find($id);
+        return BaseObject::find($id);
     }
 
     /**
@@ -51,15 +51,15 @@ class Objects implements ObjectsInterface
 
         $attributes = $this->castAttributes($attributes);
 
-        return Object::create($attributes);
+        return BaseObject::create($attributes);
     }
 
     /**
-     * @param Object $object
+     * @param BaseObject $object
      * @param array $attributes
      * @return mixed
      */
-    public function update(Object $object, array $attributes = [])
+    public function update(BaseObject $object, array $attributes = [])
     {
         //need to inject values stored till yet in data or at object base properties
         array_set($attributes, 'data', recursiveToArray((array) $object->data));
@@ -83,7 +83,7 @@ class Objects implements ObjectsInterface
 
     public function delete($id)
     {
-        return Object::destroy($id);
+        return BaseObject::destroy($id);
     }
 
     public function upsert()
@@ -98,7 +98,7 @@ class Objects implements ObjectsInterface
     )
     {
         return foa_search()
-            ->setBaseQuery(new Object())
+            ->setBaseQuery(new BaseObject())
             ->setQuery($query, 'data')
             ->setFilters($filters)
             ->setPagination($pagination)

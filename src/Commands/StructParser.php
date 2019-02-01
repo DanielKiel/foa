@@ -87,6 +87,8 @@ class StructParser extends Command
 
         $rules->schema = array_get($struct, 'rules', []);
         $rules->relations = array_get($struct, 'relations', []);
+        $rules->validation = array_get($struct, 'validation', []);
+        $rules->setup = array_get($struct, 'setup', []);
         $rules->static = array_get($struct, 'static', false);
 
         $objectType->update([
