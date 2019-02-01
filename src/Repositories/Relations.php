@@ -64,6 +64,27 @@ class Relations implements RelationsInterface
         }
     }
 
+    public function attach(BaseObject $object, $relationName, BaseObject $relatedObject)
+    {
+        $type = $this->getRelationType($object, $relationName);
+
+        return Relation::firstOrCreate([
+            'relation_type_id' => $type->id,
+            'base_id' => $object->id,
+            'target_id' => $relatedObject->id
+        ]);
+    }
+
+    public function detach(BaseObject $object, $relationName, BaseObject $relatedObject)
+    {
+        $type = $this->getRelationType($object, $relationName);
+
+        return relation::where('relation_type_id', $type->id)
+            ->where('base_id', $object->id)
+            ->where('target_id', $relatedObject->id)
+            ->delete();
+    }
+
     protected function insertRelationObject(BaseObject $object, RelationType $type, $relationAttributes)
     {
         array_set($relationAttributes, 'objectType', $type->targetType->name);

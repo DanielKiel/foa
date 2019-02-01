@@ -37,4 +37,14 @@ class RelationsServicesController extends Controller
             'per_page' => $per_page, 'page_name' => 'page', 'page' => $page
         ]);
     }
+
+    public function attach(Request $request, $objectType, BaseObject $object, $relationName, BaseObject $relatedObject)
+    {
+        return foa_relations()->attach($object, $relationName, $relatedObject);
+    }
+
+    public function detach(Request $request, $objectType, BaseObject $object, $relationName, BaseObject $relatedObject)
+    {
+        return foa_relations()->detach($object, $relationName, $relatedObject);
+    }
 }

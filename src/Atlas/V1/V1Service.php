@@ -95,6 +95,14 @@ class V1Service
                 Route::delete('/{objectTypeName}/{objectId}', [
                     'as' => 'services.objects.delete', 'uses' => 'ObjectsServicesController@delete'
                 ]);
+
+                Route::post('/{objectTypeName}/{object}/{relationName}/{relatedObject}', [
+                    'as' => 'services.objects.relations.attach', 'uses' => 'RelationsServicesController@attach'
+                ]);
+
+                Route::delete('/{objectTypeName}/{object}/{relationName}/{relatedObject}', [
+                    'as' => 'services.objects.relations.detach', 'uses' => 'RelationsServicesController@detach'
+                ]);
             }
         );
     }
