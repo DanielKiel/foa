@@ -71,15 +71,15 @@ class ObjectsRepoTest extends TestCase
             'email' => 'test@mail.de'
         ]);
 
-        $this->assertEquals(2, foa_objects()->search('', ['objectType = Objects_1'])->total());
+        $this->assertEquals(2, foa_objects()->search('', ['objectType = Objects_1'])->total);
 
-        $this->assertEquals(1, foa_objects()->search('danielkoch', ['objectType = Objects_1'])->total());
+        $this->assertEquals(1, foa_objects()->search('danielkoch', ['objectType = Objects_1'])->total);
 
-        $this->assertEquals(1, foa_objects()->search('test@mail.de', ['objectType = Objects_3'])->total());
-        $this->assertEquals(1, foa_objects()->search('', ['objectType = Objects_3', 'email = test@mail.de'])->total());
+        $this->assertEquals(1, foa_objects()->search('test@mail.de', ['objectType = Objects_3'])->total);
+        $this->assertEquals(1, foa_objects()->search('', ['objectType = Objects_3', 'email = test@mail.de'])->total);
 
-        $this->assertEquals(0, foa_objects()->search('test@mail.de', ['objectType = Objects_1'])->total());
-        $this->assertEquals(2, foa_objects()->search('', ['objectType = Objects_1', 'email NOT LIKE test.de'])->total());
-        $this->assertEquals(2, foa_objects()->search('', ['objectType = Objects_1', 'email LIKE .de'])->total());
+        $this->assertEquals(0, foa_objects()->search('test@mail.de', ['objectType = Objects_1'])->total);
+        $this->assertEquals(2, foa_objects()->search('', ['objectType = Objects_1', 'email NOT LIKE test.de'])->total);
+        $this->assertEquals(2, foa_objects()->search('', ['objectType = Objects_1', 'email LIKE .de'])->total);
     }
 }

@@ -66,7 +66,7 @@ class RelationTypes implements RelationTypesInterface
 
     public function findById($id)
     {
-
+        return RelationType::find($id);
     }
 
     public function insert(array $data)
@@ -82,11 +82,6 @@ class RelationTypes implements RelationTypesInterface
     }
 
     public function delete($id)
-    {
-
-    }
-
-    public function upsert()
     {
 
     }

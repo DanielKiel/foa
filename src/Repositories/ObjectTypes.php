@@ -119,6 +119,26 @@ class ObjectTypes implements ObjectTypesInterface
      * @param ObjectType $objectType
      * @return array
      */
+    public function getRelationTypes(ObjectType $objectType): array
+    {
+        return recursiveToArray( (array) $objectType->rules->relations );
+    }
+
+    public function getReadableRelationTypesArray(ObjectType $objectType): array
+    {
+        //we must merge it with defined relation names
+        $relationNames = [];
+        foreach ($this->getRelationTypes($objectType) as $relationType) {
+            $relationNames[array_get($relationType, 'name')] = 'rel:' . array_get($relationType, 'variant');
+        }
+
+        return $relationNames;
+    }
+
+    /**
+     * @param ObjectType $objectType
+     * @return array
+     */
     public function getValidationRules(ObjectType $objectType): array
     {
         $rules = recursiveToArray( (array) $objectType->rules->validation );

@@ -11,6 +11,7 @@ namespace Dion\Foa\Repositories;
 
 use Dion\Foa\Contracts\ObjectsInterface;
 use Dion\Foa\Events\DataDefined;
+use Dion\Foa\Exceptions\ObjectsException;
 use Dion\Foa\Models\BaseObject;
 use Dion\Foa\Models\ObjectType;
 use Dion\Foa\Rules\NotAllowed;
@@ -30,6 +31,8 @@ class Objects implements ObjectsInterface
     public function setObjectType(ObjectType $objectType)
     {
         $this->objectType = $objectType;
+
+        return $this;
     }
 
     public function findById($id)
@@ -45,13 +48,30 @@ class Objects implements ObjectsInterface
     {
         $attributes = $this->prepareAttributes($attributes);
 
+        //remove the relation names here if ncessary
+        $relationNames = foa_objectTypes()->getReadableRelationTypesArray($this->objectType);
+        $relationAttributes = [];
+
+        if (! empty($relationNames)) {
+            $relationAttributes = array_only($attributes['data'], array_keys($relationNames));
+            array_forget($attributes['data'], array_keys($relationNames));
+        }
+
         if ($this->validate($this->objectType, $attributes) === false) {
             return (new FailedObject($this->errors))->codeFailure();
         }
 
         $attributes = $this->castAttributes($attributes);
 
-        return BaseObject::create($attributes);
+        $object = BaseObject::create($attributes);
+
+        if (! empty($relationAttributes)) {
+            foreach ($relationAttributes as $relationName => $relationInsert) {
+                foa_relations()->insert($object, $relationName, $relationInsert);
+            }
+        }
+
+        return $object;
     }
 
     /**
@@ -69,6 +89,15 @@ class Objects implements ObjectsInterface
         }
 
         $attributes = $this->prepareAttributes($attributes);
+
+        //remove the relation names here if ncessary
+        $relationNames = foa_objectTypes()->getReadableRelationTypesArray($this->objectType);
+        $relationAttributes = [];
+
+        if (! empty($relationNames)) {
+            $relationAttributes = array_only($attributes['data'], array_keys($relationNames));
+            array_forget($attributes['data'], array_keys($relationNames));
+        }
 
         if ($this->validate($this->objectType, $attributes) === false) {
             return (new FailedObject($this->errors))->codeFailure();
@@ -89,6 +118,24 @@ class Objects implements ObjectsInterface
     public function upsert()
     {
 
+    }
+
+    public function searchByObjectType(
+        $query = '',
+        array $filters = [],
+        $pagination = ['per_page' => 25, 'page_name' => 'page', 'page' => null]
+    )
+    {
+        if (! $this->objectType instanceof ObjectType) {
+            throw new ObjectsException('searchByObjectType needs an objectType be defined to can search');
+        }
+
+        return foa_search()
+            ->setBaseQuery((new BaseObject())->where('objecttypes_id', $this->objectType->id))
+            ->setQuery($query, 'data')
+            ->setFilters($filters)
+            ->setPagination($pagination)
+            ->performSearch();
     }
 
     public function search(

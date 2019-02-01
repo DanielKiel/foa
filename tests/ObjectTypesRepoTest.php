@@ -56,10 +56,10 @@ class ObjectTypesRepoTest extends TestCase
         //use pagination
         $searchResult = $repo->search('Objects_1');
 
-        $this->assertEquals(1, $searchResult->total());
+        $this->assertEquals(1, $searchResult->total);
 
         $searchResult = $repo->search('Objects_');
 
-        $this->assertEquals(3, $searchResult->total());
+        $this->assertEquals(3, $searchResult->total);
     }
 }

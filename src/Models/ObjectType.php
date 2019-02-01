@@ -48,13 +48,13 @@ class ObjectType extends Model
         'rules' => 'object'
     ];
 
-    public function hasRelations(): HasMany
+    public function hasRelationTypes(): HasMany
     {
-        return $this->hasMany(Relation::class, 'base_type_id');
+        return $this->hasMany(RelationType::class, 'base_type_id');
     }
 
-    public function belongsRelations(): BelongsToMany
+    public function belongsRelationTypes(): BelongsToMany
     {
-        return $this->belongsToMany(Relation::class, 'target_type_id');
+        return $this->belongsToMany(RelationType::class, 'target_type_id');
     }
 }
