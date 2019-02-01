@@ -67,7 +67,7 @@ class Objects implements ObjectsInterface
 
         if (! empty($relationAttributes)) {
             foreach ($relationAttributes as $relationName => $relationInsert) {
-                foa_relations()->insert($object, $relationName, $relationInsert);
+                foa_relations()->upsert($object, $relationName, $relationInsert);
             }
         }
 
@@ -106,6 +106,12 @@ class Objects implements ObjectsInterface
         $attributes = $this->castAttributes($attributes);
 
         $object->update($attributes);
+
+        if (! empty($relationAttributes)) {
+            foreach ($relationAttributes as $relationName => $relationInsert) {
+                foa_relations()->upsert($object, $relationName, $relationInsert);
+            }
+        }
 
         return $object->fresh();
     }

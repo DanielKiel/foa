@@ -87,5 +87,22 @@ class RelationsRepoTest extends TestCase
             ->data;
 
         $this->assertEquals(2, count($addresses));
+
+        $relations = foa_relations()->get($obj, 'addresses');
+
+        $this->assertEquals(2, $relations->count());
+
+        //searching
+        $relations = foa_relations()->search($obj, 'addresses', 'second');
+        $this->assertEquals(1, count($relations->data));
+
+        //deleting one
+        $firstAddress = foa_objects()->findById( array_get( array_first($addresses), 'id' ) );
+
+        foa_objects()->delete($firstAddress->id);
+
+        $relations = foa_relations()->get($obj, 'addresses');
+
+        $this->assertEquals(1, $relations->count());
     }
 }

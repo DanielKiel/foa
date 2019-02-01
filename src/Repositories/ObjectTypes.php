@@ -128,8 +128,12 @@ class ObjectTypes implements ObjectTypesInterface
     {
         //we must merge it with defined relation names
         $relationNames = [];
-        foreach ($this->getRelationTypes($objectType) as $relationType) {
-            $relationNames[array_get($relationType, 'name')] = 'rel:' . array_get($relationType, 'variant');
+        foreach ($objectType->hasRelationTypes as $relationType) {
+            $relationNames[$relationType->name] = 'rel:' . $relationType->targetTYpe->name;
+        }
+
+        foreach ($objectType->belongsRelationTypes as $relationType) {
+            $relationNames[$relationType->name] = 'rel:' . $relationType->baseType->name;
         }
 
         return $relationNames;

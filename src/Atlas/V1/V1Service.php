@@ -36,6 +36,9 @@ class V1Service
                 Route::get('/{objectTypeName}/{id}', [
                     'as' => 'services.frontend.getById', 'uses' => 'ObjectsServicesController@getById'
                 ]);
+                Route::get('/{objectTypeName}/{object}/{relationName}', [
+                    'as' => 'services.frontend.relations.get', 'uses' => 'RelationsServicesController@get'
+                ]);
             }
         );
     }
