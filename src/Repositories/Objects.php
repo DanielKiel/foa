@@ -14,6 +14,7 @@ use Dion\Foa\Events\DataDefined;
 use Dion\Foa\Exceptions\ObjectsException;
 use Dion\Foa\Models\BaseObject;
 use Dion\Foa\Models\ObjectType;
+use Dion\Foa\Models\Relation;
 use Dion\Foa\Rules\NotAllowed;
 use Illuminate\Support\Facades\Validator;
 
@@ -118,6 +119,10 @@ class Objects implements ObjectsInterface
 
     public function delete($id)
     {
+        Relation::where('base_id', $id)
+            ->orWhere('target_id', $id)
+            ->delete();
+
         return BaseObject::destroy($id);
     }
 

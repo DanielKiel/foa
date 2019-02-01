@@ -19,9 +19,8 @@ class FoaInitialSetup extends Migration
             $table->bigInteger('objecttypes_id')->unsigned();
             $table->json('data');
             $table->timestamps();
-            $table->softDeletes();
 
-            $table->index(['id', 'objecttypes_id', 'deleted_at']);
+            $table->index(['id', 'objecttypes_id']);
         });
 
         Schema::create('objecttypes', function (Blueprint $table) {
@@ -31,7 +30,6 @@ class FoaInitialSetup extends Migration
             $table->string('model_type')->default(\Dion\Foa\Models\BaseObject::class);
             $table->json('rules');
             $table->timestamps();
-            $table->softDeletes();
         });
 
         Schema::create('relation_types', function (Blueprint $table) {
@@ -43,7 +41,6 @@ class FoaInitialSetup extends Migration
             $table->string('name')->index();
             $table->string('inverse_name')->index();
             $table->timestamps();
-            $table->softDeletes();
 
         });
 
@@ -54,13 +51,11 @@ class FoaInitialSetup extends Migration
             $table->bigInteger('target_id')->unsigned();
             $table->bigInteger('relation_type_id')->unsigned();
             $table->timestamps();
-            $table->softDeletes();
 
         });
 
         Schema::table('objects', function(Blueprint $table) {
             $table->foreign('objecttypes_id')->references('id')->on('objecttypes');
-            $table->index('deleted_at');
         });
 
         Schema::table('objecttypes', function(Blueprint $table) {

@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ObjectType extends Model
 {
-    use SoftDeletes;
 
     /**
      * @var bool
@@ -23,7 +22,7 @@ class ObjectType extends Model
     /**
      * @var array
      */
-    protected $dates = ['deleted_at', 'created_at', 'deleted_at'];
+    protected $dates = ['created_at', 'deleted_at'];
 
     /**
      * @var array

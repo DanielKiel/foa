@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RelationType extends Model
 {
-    use SoftDeletes;
 
     public $timestamps = true;
 
@@ -19,7 +18,7 @@ class RelationType extends Model
 
     protected $table = 'relation_types';
 
-    protected $dates = ['deleted_at', 'created_at', 'updated_at'];
+    protected $dates = ['created_at', 'updated_at'];
 
     protected $fillable = [
         'base_type_id',
