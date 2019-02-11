@@ -15,8 +15,23 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ObjectTypes implements ObjectTypesInterface
 {
-
     private $search;
+
+    public function describe(string $name)
+    {
+        $objectType = $this->findByName($name);
+
+        $cacheable = cache()->rememberForever('desc:' . $objectType->name, function () use ($objectType) {
+            return [
+                'schema' => foa_objectTypes()->getSchema($objectType),
+                'validation' => foa_objectTypes()->getValidationRules($objectType),
+                'setup' => foa_objectTypes()->getSetup($objectType),
+                'relations' => $this->getReadableRelationTypesArray($objectType)
+            ];
+        });
+
+        return $cacheable;
+    }
 
     /**
      * @param $id
@@ -48,6 +63,8 @@ class ObjectTypes implements ObjectTypesInterface
 
         foa_relationTypes()->resolveDefinition($objectType->fresh());
 
+        $this->clearCache($objectType);
+
         return $objectType;
     }
 
@@ -63,6 +80,8 @@ class ObjectTypes implements ObjectTypesInterface
         $objectType->update($attributes);
 
         foa_relationTypes()->resolveDefinition($objectType);
+
+        $this->clearCache($objectType);
 
         return $objectType;
     }
@@ -124,6 +143,15 @@ class ObjectTypes implements ObjectTypesInterface
         return recursiveToArray( (array) $objectType->rules->relations );
     }
 
+    /**
+     * @param ObjectType $objectType
+     * @return array
+     */
+    public function getFunctions(ObjectType $objectType): array
+    {
+        return recursiveToArray( (array) $objectType->rules->functions );
+    }
+
     public function getReadableRelationTypesArray(ObjectType $objectType): array
     {
         //we must merge it with defined relation names
@@ -180,6 +208,8 @@ class ObjectTypes implements ObjectTypesInterface
         $rules->validation = $validation;
 
         $objectType->update(['rules' => $rules]);
+
+        $this->clearCache($objectType);
     }
 
     /**
@@ -193,6 +223,8 @@ class ObjectTypes implements ObjectTypesInterface
         $rules->schema = $schema;
 
         $objectType->update(['rules' => $rules]);
+
+        $this->clearCache($objectType);
     }
 
     /**
@@ -206,6 +238,23 @@ class ObjectTypes implements ObjectTypesInterface
         $rules->setup = $setup;
 
         $objectType->update(['rules' => $rules]);
+
+        $this->clearCache($objectType);
+    }
+
+    /**
+     * @param ObjectType $objectType
+     * @param array $functions
+     */
+    public function defineFunctions(ObjectType $objectType, array $functions = []): void
+    {
+        $rules = $objectType->rules;
+
+        $rules->functions = $functions;
+
+        $objectType->update(['rules' => $rules]);
+
+        $this->clearCache($objectType);
     }
 
     /**
@@ -221,6 +270,8 @@ class ObjectTypes implements ObjectTypesInterface
         $objectType->update(['rules' => $rules]);
 
         foa_relationTypes()->resolveDefinition($objectType);
+
+        $this->clearCache($objectType);
     }
 
     protected function defineDefaultRules($attributes):array
@@ -247,6 +298,19 @@ class ObjectTypes implements ObjectTypesInterface
             array_set($rules, 'setup', false);
         }
 
+        if (! array_has($rules, 'functions')) {
+            array_set($rules, 'functions', []);
+        }
+
         return $rules;
+    }
+
+    protected function clearCache(ObjectType $objectType)
+    {
+        $key = 'desc:' . $objectType->name;
+
+        if (cache()->has($key)) {
+            cache()->delete($key);
+        }
     }
 }

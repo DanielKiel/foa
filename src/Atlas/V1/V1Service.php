@@ -30,6 +30,9 @@ class V1Service
                 'namespace' => '\Dion\Foa\HTTP\Controllers'
             ],
             function() {
+                Route::get('/describe/{objectTypeName}', [
+                    'as' => 'services.frontend.get', 'uses' => 'ObjectTypesServicesController@describe'
+                ]);
                 Route::get('/{objectTypeName}', [
                     'as' => 'services.frontend.get', 'uses' => 'ObjectsServicesController@get'
                 ]);

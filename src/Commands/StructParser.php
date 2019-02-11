@@ -91,8 +91,8 @@ class StructParser extends Command
         $rules->setup = array_get($struct, 'setup', []);
         $rules->static = array_get($struct, 'static', false);
 
-        $objectType->update([
-            'rules' => $rules
+        foa_objectTypes()->update($objectType, [
+            'rules' =>recursiveToArray( (array) $rules)
         ]);
 
         $this->info($message);

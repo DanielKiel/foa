@@ -2,9 +2,11 @@
 
 namespace Dion\Foa\Listeners;
 
+use Dion\Foa\Contracts\AttributeCasterInterface;
 use Dion\Foa\Events\DataTransformed;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 
 class DataTransformedListener
 {
@@ -38,15 +40,17 @@ class DataTransformedListener
 
             $value = array_get($event->data, $attribute);
 
-            if (method_exists($this, $cast)) {
-                $value = $this->{$cast}($value);
+            $caster = resolve(AttributeCasterInterface::class);
+
+            if (method_exists($caster, $cast)) {
+                $value = $caster->{$cast}($value, $event->data);
             }
             else {
                 try {
                     settype($value, $cast);
                 }
                 catch(\Exception $e) {
-
+                    Log::error($e->getMessage());
                 }
             }
 

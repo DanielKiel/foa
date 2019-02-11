@@ -71,7 +71,7 @@ class ObjectsServicesController extends Controller
 
         array_push($filters, 'objectType = ' . $objectType);
 
-        return foa_objects()->search($query, $filters, [
+        return (array) foa_objects()->search($query, $filters, [
             'per_page' => $per_page, 'page_name' => 'page', 'page' => $page
         ]);
     }

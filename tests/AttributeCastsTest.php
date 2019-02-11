@@ -35,7 +35,7 @@ class AttributeCastsTest extends TestCase
         $this->assertNotEquals('myPassword', $object->data->pass);
         $this->assertTrue(is_int($object->data->myI));
 
-        $this->assertEquals('myPassword', array_get($object->toArray(), 'pass'));
+        $this->assertNotEquals('myPassword', array_get($object->toArray(), 'pass'));
         $this->assertEquals('myT', array_get($object->toArray(), 'myT'));
         $this->assertTrue(is_int(array_get($object->toArray(), 'myI')));
     }
