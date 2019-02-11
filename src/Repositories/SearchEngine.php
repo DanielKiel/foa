@@ -68,12 +68,12 @@ class SearchEngine
      */
     private function returnPagination()
     {
-        return $this->search->paginate(
+        return (object) $this->search->paginate(
             (int) array_get($this->pagination, 'per_page',25),
             $columns = ['*'],
             array_get($this->pagination, 'page_name','page'),
             array_get($this->pagination, 'page',null)
-        );
+        )->toArray();
     }
 
     /**

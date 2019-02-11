@@ -30,11 +30,17 @@ class V1Service
                 'namespace' => '\Dion\Foa\HTTP\Controllers'
             ],
             function() {
+                Route::get('/describe/{objectTypeName}', [
+                    'as' => 'services.frontend.get', 'uses' => 'ObjectTypesServicesController@describe'
+                ]);
                 Route::get('/{objectTypeName}', [
                     'as' => 'services.frontend.get', 'uses' => 'ObjectsServicesController@get'
                 ]);
                 Route::get('/{objectTypeName}/{id}', [
                     'as' => 'services.frontend.getById', 'uses' => 'ObjectsServicesController@getById'
+                ]);
+                Route::get('/{objectTypeName}/{object}/{relationName}', [
+                    'as' => 'services.frontend.relations.get', 'uses' => 'RelationsServicesController@get'
                 ]);
             }
         );
@@ -51,8 +57,12 @@ class V1Service
                 'namespace' => '\Dion\Foa\HTTP\Controllers'
             ],
             function() {
-                Route::post('/', [
+                Route::post('/{objectType}', [
                     'as' => 'services.upload', 'uses' => 'UploadServiceController@upload'
+                ]);
+
+                Route::get('/{objectType}/{filename}', [
+                    'as' => 'services.upload', 'uses' => 'UploadServiceController@get'
                 ]);
             }
         );
@@ -87,6 +97,14 @@ class V1Service
 
                 Route::delete('/{objectTypeName}/{objectId}', [
                     'as' => 'services.objects.delete', 'uses' => 'ObjectsServicesController@delete'
+                ]);
+
+                Route::post('/{objectTypeName}/{object}/{relationName}/{relatedObject}', [
+                    'as' => 'services.objects.relations.attach', 'uses' => 'RelationsServicesController@attach'
+                ]);
+
+                Route::delete('/{objectTypeName}/{object}/{relationName}/{relatedObject}', [
+                    'as' => 'services.objects.relations.detach', 'uses' => 'RelationsServicesController@detach'
                 ]);
             }
         );

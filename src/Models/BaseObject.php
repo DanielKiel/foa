@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Object extends Model
+class BaseObject extends Model
 {
-    use SoftDeletes;
 
     /**
      * @var bool
@@ -25,7 +24,7 @@ class Object extends Model
     /**
      * @var array
      */
-    protected $dates = ['deleted_at', 'created_at', 'deleted_at'];
+    protected $dates = ['created_at', 'deleted_at'];
 
     /**
      * @var array

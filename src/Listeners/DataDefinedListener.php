@@ -2,9 +2,11 @@
 
 namespace Dion\Foa\Listeners;
 
+use Dion\Foa\Contracts\AttributeCasterInterface;
 use Dion\Foa\Events\DataDefined;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 
 class DataDefinedListener
 {
@@ -38,15 +40,17 @@ class DataDefinedListener
 
             $value = array_get($event->data, $attribute);
 
-            if (method_exists($this, $cast)) {
-                $value = $this->{$cast}($value);
+            $caster = resolve(AttributeCasterInterface::class);
+
+            if (method_exists($caster, $cast)) {
+                $value = $caster->{$cast}($value, $event->data);
             }
             else {
                 try {
                     settype($value, $cast);
                 }
                 catch(\Exception $e) {
-
+                    Log::error($e->getMessage());
                 }
             }
 
@@ -56,10 +60,5 @@ class DataDefinedListener
                 $value
             );
         }
-    }
-
-    protected function password($value)
-    {
-        return encrypt($value);
     }
 }

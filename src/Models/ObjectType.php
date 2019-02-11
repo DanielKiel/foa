@@ -3,13 +3,11 @@
 namespace Dion\Foa\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ObjectType extends Model
 {
-    use SoftDeletes;
 
     /**
      * @var bool
@@ -24,7 +22,7 @@ class ObjectType extends Model
     /**
      * @var array
      */
-    protected $dates = ['deleted_at', 'created_at', 'deleted_at'];
+    protected $dates = ['created_at', 'deleted_at'];
 
     /**
      * @var array
@@ -40,7 +38,7 @@ class ObjectType extends Model
      * @var array
      */
     protected $attributes = [
-        'model_type' => Object::class,
+        'model_type' => BaseObject::class,
         'rules' => '{}'
     ];
 
@@ -48,13 +46,13 @@ class ObjectType extends Model
         'rules' => 'object'
     ];
 
-    public function hasRelations(): HasMany
+    public function hasRelationTypes(): HasMany
     {
-        return $this->hasMany(Relation::class, 'base_type_id');
+        return $this->hasMany(RelationType::class, 'base_type_id');
     }
 
-    public function belongsRelations(): BelongsToMany
+    public function belongsRelationTypes(): HasMany
     {
-        return $this->belongsToMany(Relation::class, 'target_type_id');
+        return $this->hasMany(RelationType::class, 'target_type_id');
     }
 }
